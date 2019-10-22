@@ -1,0 +1,50 @@
+var mongoose = require('mongoose');
+var mongoUrl = 'mongodb://localhost:27017';
+const Customer = require('../models/customerModel');
+
+
+
+function handleError(error, res) {
+    res.send('error');
+}
+
+exports.findOne = function (res, id) {
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, dbName: 'mydb' }).catch(error => handleError(error, res));
+    var db = mongoose.connection;
+    Customer.findById(id, function (err, result) { // handles undefined and ObjectId cast
+        if (err) handleError(err, res);
+        db.close();
+        res.json({ data: result });
+    });
+};
+
+exports.deleteOne = function (res, id) {
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, dbName: 'mydb' }).catch(error => handleError(error, res));
+    var db = mongoose.connection;
+    Customer.findByIdAndDelete(id, function (err, result) { // handles undefined and ObjectId cast
+        if (err) handleError(err, res);
+        db.close();
+        res.json({ data: result });
+    });
+};
+
+exports.updateOne = function (res, customer) {
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, dbName: 'mydb' }).catch(error => handleError(error, res));
+    var db = mongoose.connection;
+    Customer.findByIdAndUpdate(customer._id, { firstName: customer.firstName, lastName: customer.lastName }, function (err, result) { // handles undefined and ObjectId cast
+        if (err) handleError(err, res);
+        db.close();
+        res.json({ data: result });
+    });
+};
+
+exports.createOne = function (res, customer) {
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, dbName: 'mydb' }).catch(error => handleError(error, res));
+    var db = mongoose.connection;
+    console.log('create one: ' + JSON.stringify(customer));
+    Customer.create(customer, function (err, result) { 
+        if (err) handleError(err, res);
+        db.close();
+        res.json({ data: result });
+    });
+};
