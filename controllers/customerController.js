@@ -2,8 +2,18 @@ const Customer = require('../models/customerModel');
 
 exports.getCustomers = function (req, res, next) {
     var query = Customer.find();
-    // query.sort({lastName: -1});
+    query.select('-__v'); // mongoose internal versioning for concurrency issue resolution
+    query.sort({ lastName: 'asc' });
     query.exec(function (err, result) {
+        if (err) return next(err);
+        res.json({ data: result });
+    });
+};
+
+exports.getCustomersIncOrders = function (req, res, next) {
+    Customer.find()
+    .populate({ path: 'orders', populate: { path: 'products', select: 'price productName -_id' } } ) // nested populating
+    .exec(function (err, result) { 
         if (err) return next(err);
         res.json({ data: result });
     });
