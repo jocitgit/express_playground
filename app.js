@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
+
+
 
 var indexRouter = require('./routes/index');
 var customersRouter = require('./routes/customers');
@@ -13,6 +16,7 @@ var mongoose = require('mongoose');
 var mongoUrl = 'mongodb://localhost:27017';
 
 var app = express();
+app.use(cors()); // should use whitelist
 
 // create default db connection
 mongoose.connect(mongoUrl, { useNewUrlParser: true, dbName: 'mydb' });

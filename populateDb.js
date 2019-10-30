@@ -39,7 +39,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // });
 var order = {
     products: [ 
-        mongoose.Types.ObjectId('5db025428f034a300c86a68e'), 
+        mongoose.Types.ObjectId('5db025428f034a300c86a68e'), // can populate using either objectId or entire product object
         mongoose.Types.ObjectId('5db025428f034a300c86a690') ], 
     customer: mongoose.Types.ObjectId('5db051eb868f115704b6617c'), 
     customerId: mongoose.Types.ObjectId('5db051eb868f115704b6617c')
