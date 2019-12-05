@@ -9,7 +9,7 @@ exports.getCustomers = function (req, res, next) {
     query.exec(function (err, result) {
         // if (err) return next(err);
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         } else {
             res.json({ data: result });
         }
@@ -21,7 +21,7 @@ exports.getCustomersIncOrders = function (req, res, next) {
         .populate({ path: 'orders', populate: { path: 'products', select: 'price productName -_id' } }) // nested populating
         .exec(function (err, result) {
             if (err) {
-                res.json(err);
+                res.status(500).json(err);
             } else {
                 res.json({ data: result });
             }
@@ -41,7 +41,7 @@ exports.getCustomer = function (req, res, next) {
 exports.deleteCustomer = function (req, res, next) {
     Customer.findByIdAndDelete(req.params.customerId, function (err, result) { // handles undefined and ObjectId cast
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         } else {
             res.json({ data: result });
         }
@@ -60,13 +60,13 @@ exports.createCustomer = [ // array of middleware functions - called in order
     function (req, res, next) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.json({ errors: errors });
+            res.status(500).json(errors);
             return;
         }
         var customer = req.body;
         Customer.create(customer, function (err, result) {
             if (err) {
-                res.json(err);
+                res.status(500).json(err);
             } else {
                 res.json({ data: result });
             }
@@ -78,7 +78,7 @@ exports.updateCustomer = function (req, res, next) {
     var customer = req.body;
     Customer.findByIdAndUpdate(customer._id, { firstName: customer.firstName, lastName: customer.lastName }, { runValidators: true }, function (err, result) { // handles undefined and ObjectId cast
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         } else {
             res.json({ data: result });
         }
